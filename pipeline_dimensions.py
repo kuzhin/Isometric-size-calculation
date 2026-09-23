@@ -223,8 +223,11 @@ def main():
     )
 
     print("Selected dimensions:")
+    line = str()
     for i, item in enumerate(analysis["selected_dimensions"], 1):
         print(f"{i:2}. {item['value']} mm | {item['group']} | {item['kind']}")
+        line += f"{item['value']}+"
+    print(line[:-1],"=", sum(int(n) for n in line[:-1].split("+")))
     print(f"TOTAL = {analysis['calculation']['total_mm']} mm")
     print(f"PDF:  {output_pdf}")
     print(f"CSV:  {output_csv}")
