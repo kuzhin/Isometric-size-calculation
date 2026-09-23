@@ -4,7 +4,7 @@ import json
 import re
 from pathlib import Path
 
-import fitz  # PyMuPDF
+import pymupdf  # PyMuPDF
 
 
 # IMPORTANT:
@@ -29,7 +29,7 @@ def extract_numeric_text(page):
     for word_index, word in enumerate(page.get_text("words")):
         text = word[4].strip()
         if NUMBER_RE.fullmatch(text):
-            rect = fitz.Rect(word[:4])
+            rect = pymupdf.Rect(word[:4])
             result.append({
                 "word_index": word_index,
                 "value": int(text),
@@ -135,14 +135,14 @@ def analyze_page(page):
 
 
 def annotate_pdf(input_pdf, output_pdf, analysis):
-    doc = fitz.open(input_pdf)
+    doc = pymupdf.open(input_pdf)
     page = doc[0]
 
     for index, item in enumerate(analysis["selected_dimensions"], 1):
-        rect = fitz.Rect(item["bbox"])
-        marked = fitz.Rect(rect.x0 - 2, rect.y0 - 2, rect.x1 + 2, rect.y1 + 2)
+        rect = pymupdf.Rect(item["bbox"])
+        marked = pymupdf.Rect(rect.x0 - 2, rect.y0 - 2, rect.x1 + 2, rect.y1 + 2)
         page.draw_rect(marked, color=(1, 0, 0), width=1.4)
-        label = fitz.Rect(
+        label = pymupdf.Rect(
             marked.x0,
             max(0, marked.y0 - 10),
             marked.x0 + 16,
@@ -156,7 +156,7 @@ def annotate_pdf(input_pdf, output_pdf, analysis):
         + " + ".join(str(x["value"]) for x in analysis["selected_dimensions"])
         + f" = {total} mm"
     )
-    box = fitz.Rect(820, 650, 1165, 790)
+    box = pymupdf.Rect(820, 650, 1165, 790)
     page.draw_rect(box, color=(0, 0, 0), width=0.8)
     page.insert_textbox(box, summary, fontsize=9, color=(0, 0, 0))
 
@@ -194,7 +194,7 @@ def main():
 
     args.outdir.mkdir(parents=True, exist_ok=True)
 
-    doc = fitz.open(args.input_pdf)
+    doc = pymupdf.open(args.input_pdf)
     if len(doc) != 1:
         raise ValueError("Prototype currently expects a single-page PDF.")
     analysis = analyze_page(doc[0])
