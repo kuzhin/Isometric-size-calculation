@@ -1,0 +1,1225 @@
+{
+  "source": "input_pdf.pdf",
+  "method": "vector PDF text extraction + geometry/visual classification; no OCR",
+  "all_numeric_objects": [
+    {
+      "word_index": 1,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        375.3,
+        49.76,
+        395.09,
+        58.17
+      ],
+      "center": [
+        385.19,
+        53.96
+      ]
+    },
+    {
+      "word_index": 3,
+      "value": 131389,
+      "text": "131389",
+      "bbox": [
+        375.3,
+        58.4,
+        395.09,
+        66.81
+      ],
+      "center": [
+        385.19,
+        62.6
+      ]
+    },
+    {
+      "word_index": 5,
+      "value": 11550,
+      "text": "11550",
+      "bbox": [
+        376.75,
+        66.8,
+        393.17,
+        75.21
+      ],
+      "center": [
+        384.96,
+        71.0
+      ]
+    },
+    {
+      "word_index": 13,
+      "value": 130650,
+      "text": "130650",
+      "bbox": [
+        435.3,
+        148.88,
+        455.09,
+        157.29
+      ],
+      "center": [
+        445.19,
+        153.08
+      ]
+    },
+    {
+      "word_index": 19,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        599.94,
+        272.0,
+        619.73,
+        280.41
+      ],
+      "center": [
+        609.83,
+        276.2
+      ]
+    },
+    {
+      "word_index": 21,
+      "value": 130326,
+      "text": "130326",
+      "bbox": [
+        599.94,
+        280.4,
+        619.73,
+        288.81
+      ],
+      "center": [
+        609.83,
+        284.6
+      ]
+    },
+    {
+      "word_index": 23,
+      "value": 11550,
+      "text": "11550",
+      "bbox": [
+        601.39,
+        289.04,
+        617.81,
+        297.45
+      ],
+      "center": [
+        609.6,
+        293.24
+      ]
+    },
+    {
+      "word_index": 31,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        279.06,
+        250.16,
+        298.85,
+        258.57
+      ],
+      "center": [
+        288.95,
+        254.36
+      ]
+    },
+    {
+      "word_index": 33,
+      "value": 131384,
+      "text": "131384",
+      "bbox": [
+        279.06,
+        258.56,
+        298.85,
+        266.97
+      ],
+      "center": [
+        288.95,
+        262.76
+      ]
+    },
+    {
+      "word_index": 35,
+      "value": 9100,
+      "text": "9100",
+      "bbox": [
+        280.57,
+        267.2,
+        293.8,
+        275.61
+      ],
+      "center": [
+        287.19,
+        271.4
+      ]
+    },
+    {
+      "word_index": 40,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        408.66,
+        416.24,
+        428.45,
+        424.65
+      ],
+      "center": [
+        418.55,
+        420.44
+      ]
+    },
+    {
+      "word_index": 42,
+      "value": 130650,
+      "text": "130650",
+      "bbox": [
+        408.66,
+        424.64,
+        428.45,
+        433.05
+      ],
+      "center": [
+        418.55,
+        428.84
+      ]
+    },
+    {
+      "word_index": 44,
+      "value": 8843,
+      "text": "8843",
+      "bbox": [
+        410.17,
+        433.28,
+        423.4,
+        441.69
+      ],
+      "center": [
+        416.79,
+        437.48
+      ]
+    },
+    {
+      "word_index": 51,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        584.58,
+        564.56,
+        604.37,
+        572.97
+      ],
+      "center": [
+        594.47,
+        568.76
+      ]
+    },
+    {
+      "word_index": 53,
+      "value": 130650,
+      "text": "130650",
+      "bbox": [
+        584.58,
+        572.96,
+        604.37,
+        581.37
+      ],
+      "center": [
+        594.47,
+        577.16
+      ]
+    },
+    {
+      "word_index": 55,
+      "value": 8373,
+      "text": "8373",
+      "bbox": [
+        586.09,
+        581.36,
+        599.32,
+        589.77
+      ],
+      "center": [
+        592.71,
+        585.56
+      ]
+    },
+    {
+      "word_index": 59,
+      "value": 50,
+      "text": "50",
+      "bbox": [
+        368.16,
+        41.36,
+        374.78,
+        49.77
+      ],
+      "center": [
+        371.47,
+        45.56
+      ]
+    },
+    {
+      "word_index": 62,
+      "value": 154,
+      "text": "154",
+      "bbox": [
+        334.26,
+        144.74,
+        347.18,
+        157.05
+      ],
+      "center": [
+        340.72,
+        150.89
+      ]
+    },
+    {
+      "word_index": 63,
+      "value": 244,
+      "text": "244",
+      "bbox": [
+        359.28,
+        192.8,
+        369.39,
+        201.21
+      ],
+      "center": [
+        364.34,
+        197.0
+      ]
+    },
+    {
+      "word_index": 66,
+      "value": 341,
+      "text": "341",
+      "bbox": [
+        427.86,
+        198.74,
+        440.78,
+        211.05
+      ],
+      "center": [
+        434.32,
+        204.89
+      ]
+    },
+    {
+      "word_index": 68,
+      "value": 220,
+      "text": "220",
+      "bbox": [
+        515.82,
+        150.87,
+        524.29,
+        161.01
+      ],
+      "center": [
+        520.06,
+        155.94
+      ]
+    },
+    {
+      "word_index": 70,
+      "value": 4116,
+      "text": "4116",
+      "bbox": [
+        486.24,
+        100.16,
+        499.47,
+        108.57
+      ],
+      "center": [
+        492.86,
+        104.36
+      ]
+    },
+    {
+      "word_index": 71,
+      "value": 188,
+      "text": "188",
+      "bbox": [
+        500.58,
+        240.26,
+        513.5,
+        252.57
+      ],
+      "center": [
+        507.04,
+        246.41
+      ]
+    },
+    {
+      "word_index": 72,
+      "value": 134,
+      "text": "134",
+      "bbox": [
+        519.6,
+        286.4,
+        529.71,
+        294.81
+      ],
+      "center": [
+        524.66,
+        290.6
+      ]
+    },
+    {
+      "word_index": 75,
+      "value": 550,
+      "text": "550",
+      "bbox": [
+        469.74,
+        249.75,
+        478.21,
+        259.89
+      ],
+      "center": [
+        473.98,
+        254.82
+      ]
+    },
+    {
+      "word_index": 77,
+      "value": 2450,
+      "text": "2450",
+      "bbox": [
+        452.46,
+        282.63,
+        460.93,
+        295.89
+      ],
+      "center": [
+        456.7,
+        289.26
+      ]
+    },
+    {
+      "word_index": 80,
+      "value": 9100,
+      "text": "9100",
+      "bbox": [
+        540.25,
+        327.92,
+        553.48,
+        336.33
+      ],
+      "center": [
+        546.87,
+        332.12
+      ]
+    },
+    {
+      "word_index": 81,
+      "value": 341,
+      "text": "341",
+      "bbox": [
+        427.86,
+        351.62,
+        440.78,
+        363.93
+      ],
+      "center": [
+        434.32,
+        357.77
+      ]
+    },
+    {
+      "word_index": 82,
+      "value": 244,
+      "text": "244",
+      "bbox": [
+        347.28,
+        369.68,
+        357.39,
+        378.09
+      ],
+      "center": [
+        352.34,
+        373.88
+      ]
+    },
+    {
+      "word_index": 85,
+      "value": 149,
+      "text": "149",
+      "bbox": [
+        333.78,
+        297.86,
+        346.7,
+        310.17
+      ],
+      "center": [
+        340.24,
+        304.01
+      ]
+    },
+    {
+      "word_index": 88,
+      "value": 50,
+      "text": "50",
+      "bbox": [
+        271.92,
+        241.76,
+        278.54,
+        250.17
+      ],
+      "center": [
+        275.23,
+        245.96
+      ]
+    },
+    {
+      "word_index": 91,
+      "value": 220,
+      "text": "220",
+      "bbox": [
+        515.82,
+        380.31,
+        524.29,
+        390.45
+      ],
+      "center": [
+        520.06,
+        385.38
+      ]
+    },
+    {
+      "word_index": 93,
+      "value": 135,
+      "text": "135",
+      "bbox": [
+        515.82,
+        438.15,
+        524.29,
+        448.29
+      ],
+      "center": [
+        520.06,
+        443.22
+      ]
+    },
+    {
+      "word_index": 94,
+      "value": 134,
+      "text": "134",
+      "bbox": [
+        575.52,
+        465.2,
+        585.63,
+        473.61
+      ],
+      "center": [
+        580.58,
+        469.4
+      ]
+    },
+    {
+      "word_index": 97,
+      "value": 200,
+      "text": "200",
+      "bbox": [
+        515.82,
+        509.91,
+        524.29,
+        520.05
+      ],
+      "center": [
+        520.06,
+        514.98
+      ]
+    },
+    {
+      "word_index": 105,
+      "value": 10,
+      "text": "10",
+      "bbox": [
+        905.29,
+        67.28,
+        931.98,
+        94.06
+      ],
+      "center": [
+        918.63,
+        80.67
+      ]
+    },
+    {
+      "word_index": 107,
+      "value": 10,
+      "text": "10",
+      "bbox": [
+        971.94,
+        67.28,
+        998.62,
+        94.06
+      ],
+      "center": [
+        985.28,
+        80.67
+      ]
+    },
+    {
+      "word_index": 112,
+      "value": 134,
+      "text": "134",
+      "bbox": [
+        993.74,
+        151.95,
+        1010.42,
+        163.11
+      ],
+      "center": [
+        1002.08,
+        157.53
+      ]
+    }
+  ],
+  "selected_dimensions": [
+    {
+      "word_index": 62,
+      "value": 154,
+      "text": "154",
+      "bbox": [
+        334.26,
+        144.74,
+        347.18,
+        157.05
+      ],
+      "center": [
+        340.72,
+        150.89
+      ],
+      "group": "upper_left",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 63,
+      "value": 244,
+      "text": "244",
+      "bbox": [
+        359.28,
+        192.8,
+        369.39,
+        201.21
+      ],
+      "center": [
+        364.34,
+        197.0
+      ],
+      "group": "upper_left",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 66,
+      "value": 341,
+      "text": "341",
+      "bbox": [
+        427.86,
+        198.74,
+        440.78,
+        211.05
+      ],
+      "center": [
+        434.32,
+        204.89
+      ],
+      "group": "upper_left",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 71,
+      "value": 188,
+      "text": "188",
+      "bbox": [
+        500.58,
+        240.26,
+        513.5,
+        252.57
+      ],
+      "center": [
+        507.04,
+        246.41
+      ],
+      "group": "upper_right",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 72,
+      "value": 134,
+      "text": "134",
+      "bbox": [
+        519.6,
+        286.4,
+        529.71,
+        294.81
+      ],
+      "center": [
+        524.66,
+        290.6
+      ],
+      "group": "upper_right",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 85,
+      "value": 149,
+      "text": "149",
+      "bbox": [
+        333.78,
+        297.86,
+        346.7,
+        310.17
+      ],
+      "center": [
+        340.24,
+        304.01
+      ],
+      "group": "lower_left",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 82,
+      "value": 244,
+      "text": "244",
+      "bbox": [
+        347.28,
+        369.68,
+        357.39,
+        378.09
+      ],
+      "center": [
+        352.34,
+        373.88
+      ],
+      "group": "lower_left",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 81,
+      "value": 341,
+      "text": "341",
+      "bbox": [
+        427.86,
+        351.62,
+        440.78,
+        363.93
+      ],
+      "center": [
+        434.32,
+        357.77
+      ],
+      "group": "lower_left",
+      "kind": "route_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 77,
+      "value": 2450,
+      "text": "2450",
+      "bbox": [
+        452.46,
+        282.63,
+        460.93,
+        295.89
+      ],
+      "center": [
+        456.7,
+        289.26
+      ],
+      "group": "main_vertical",
+      "kind": "overall_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 68,
+      "value": 220,
+      "text": "220",
+      "bbox": [
+        515.82,
+        150.87,
+        524.29,
+        161.01
+      ],
+      "center": [
+        520.06,
+        155.94
+      ],
+      "group": "branch_LT",
+      "kind": "branch_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 91,
+      "value": 220,
+      "text": "220",
+      "bbox": [
+        515.82,
+        380.31,
+        524.29,
+        390.45
+      ],
+      "center": [
+        520.06,
+        385.38
+      ],
+      "group": "lower_vertical",
+      "kind": "branch_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 93,
+      "value": 135,
+      "text": "135",
+      "bbox": [
+        515.82,
+        438.15,
+        524.29,
+        448.29
+      ],
+      "center": [
+        520.06,
+        443.22
+      ],
+      "group": "lower_vertical",
+      "kind": "branch_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 94,
+      "value": 134,
+      "text": "134",
+      "bbox": [
+        575.52,
+        465.2,
+        585.63,
+        473.61
+      ],
+      "center": [
+        580.58,
+        469.4
+      ],
+      "group": "lower_vertical",
+      "kind": "branch_segment",
+      "use_for_calculation": true
+    },
+    {
+      "word_index": 97,
+      "value": 200,
+      "text": "200",
+      "bbox": [
+        515.82,
+        509.91,
+        524.29,
+        520.05
+      ],
+      "center": [
+        520.06,
+        514.98
+      ],
+      "group": "lower_vertical",
+      "kind": "branch_segment",
+      "use_for_calculation": true
+    }
+  ],
+  "excluded_numeric_objects": [
+    {
+      "word_index": 1,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        375.3,
+        49.76,
+        395.09,
+        58.17
+      ],
+      "center": [
+        385.19,
+        53.96
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 3,
+      "value": 131389,
+      "text": "131389",
+      "bbox": [
+        375.3,
+        58.4,
+        395.09,
+        66.81
+      ],
+      "center": [
+        385.19,
+        62.6
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 5,
+      "value": 11550,
+      "text": "11550",
+      "bbox": [
+        376.75,
+        66.8,
+        393.17,
+        75.21
+      ],
+      "center": [
+        384.96,
+        71.0
+      ],
+      "reason": "coordinate/elevation (Z+)"
+    },
+    {
+      "word_index": 13,
+      "value": 130650,
+      "text": "130650",
+      "bbox": [
+        435.3,
+        148.88,
+        455.09,
+        157.29
+      ],
+      "center": [
+        445.19,
+        153.08
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 19,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        599.94,
+        272.0,
+        619.73,
+        280.41
+      ],
+      "center": [
+        609.83,
+        276.2
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 21,
+      "value": 130326,
+      "text": "130326",
+      "bbox": [
+        599.94,
+        280.4,
+        619.73,
+        288.81
+      ],
+      "center": [
+        609.83,
+        284.6
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 23,
+      "value": 11550,
+      "text": "11550",
+      "bbox": [
+        601.39,
+        289.04,
+        617.81,
+        297.45
+      ],
+      "center": [
+        609.6,
+        293.24
+      ],
+      "reason": "coordinate/elevation (Z+)"
+    },
+    {
+      "word_index": 31,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        279.06,
+        250.16,
+        298.85,
+        258.57
+      ],
+      "center": [
+        288.95,
+        254.36
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 33,
+      "value": 131384,
+      "text": "131384",
+      "bbox": [
+        279.06,
+        258.56,
+        298.85,
+        266.97
+      ],
+      "center": [
+        288.95,
+        262.76
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 35,
+      "value": 9100,
+      "text": "9100",
+      "bbox": [
+        280.57,
+        267.2,
+        293.8,
+        275.61
+      ],
+      "center": [
+        287.19,
+        271.4
+      ],
+      "reason": "coordinate/elevation (Z+)"
+    },
+    {
+      "word_index": 40,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        408.66,
+        416.24,
+        428.45,
+        424.65
+      ],
+      "center": [
+        418.55,
+        420.44
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 42,
+      "value": 130650,
+      "text": "130650",
+      "bbox": [
+        408.66,
+        424.64,
+        428.45,
+        433.05
+      ],
+      "center": [
+        418.55,
+        428.84
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 44,
+      "value": 8843,
+      "text": "8843",
+      "bbox": [
+        410.17,
+        433.28,
+        423.4,
+        441.69
+      ],
+      "center": [
+        416.79,
+        437.48
+      ],
+      "reason": "coordinate/elevation (Z+)"
+    },
+    {
+      "word_index": 51,
+      "value": 104000,
+      "text": "104000",
+      "bbox": [
+        584.58,
+        564.56,
+        604.37,
+        572.97
+      ],
+      "center": [
+        594.47,
+        568.76
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 53,
+      "value": 130650,
+      "text": "130650",
+      "bbox": [
+        584.58,
+        572.96,
+        604.37,
+        581.37
+      ],
+      "center": [
+        594.47,
+        577.16
+      ],
+      "reason": "not selected by current route rules"
+    },
+    {
+      "word_index": 55,
+      "value": 8373,
+      "text": "8373",
+      "bbox": [
+        586.09,
+        581.36,
+        599.32,
+        589.77
+      ],
+      "center": [
+        592.71,
+        585.56
+      ],
+      "reason": "coordinate/elevation (Z+)"
+    },
+    {
+      "word_index": 59,
+      "value": 50,
+      "text": "50",
+      "bbox": [
+        368.16,
+        41.36,
+        374.78,
+        49.77
+      ],
+      "center": [
+        371.47,
+        45.56
+      ],
+      "reason": "nominal pipe diameter"
+    },
+    {
+      "word_index": 70,
+      "value": 4116,
+      "text": "4116",
+      "bbox": [
+        486.24,
+        100.16,
+        499.47,
+        108.57
+      ],
+      "center": [
+        492.86,
+        104.36
+      ],
+      "reason": "instrument/tag value (LT 4116)"
+    },
+    {
+      "word_index": 75,
+      "value": 550,
+      "text": "550",
+      "bbox": [
+        469.74,
+        249.75,
+        478.21,
+        259.89
+      ],
+      "center": [
+        473.98,
+        254.82
+      ],
+      "reason": "nested/internal dimension inside 2450 overall span"
+    },
+    {
+      "word_index": 80,
+      "value": 9100,
+      "text": "9100",
+      "bbox": [
+        540.25,
+        327.92,
+        553.48,
+        336.33
+      ],
+      "center": [
+        546.87,
+        332.12
+      ],
+      "reason": "coordinate/elevation (Z+)"
+    },
+    {
+      "word_index": 88,
+      "value": 50,
+      "text": "50",
+      "bbox": [
+        271.92,
+        241.76,
+        278.54,
+        250.17
+      ],
+      "center": [
+        275.23,
+        245.96
+      ],
+      "reason": "nominal pipe diameter"
+    },
+    {
+      "word_index": 105,
+      "value": 10,
+      "text": "10",
+      "bbox": [
+        905.29,
+        67.28,
+        931.98,
+        94.06
+      ],
+      "center": [
+        918.63,
+        80.67
+      ],
+      "reason": "title/block/reference number"
+    },
+    {
+      "word_index": 107,
+      "value": 10,
+      "text": "10",
+      "bbox": [
+        971.94,
+        67.28,
+        998.62,
+        94.06
+      ],
+      "center": [
+        985.28,
+        80.67
+      ],
+      "reason": "title/block/reference number"
+    },
+    {
+      "word_index": 112,
+      "value": 134,
+      "text": "134",
+      "bbox": [
+        993.74,
+        151.95,
+        1010.42,
+        163.11
+      ],
+      "center": [
+        1002.08,
+        157.53
+      ],
+      "reason": "not selected by current route rules"
+    }
+  ],
+  "calculation": {
+    "operation": "sum selected route dimensions",
+    "total_mm": 5154
+  },
+  "notes": [
+    "550 mm is nested inside the 2450 mm overall vertical span and is not summed separately.",
+    "4116 is the LT instrument/tag value, not a geometric route dimension.",
+    "11550/9100/8843/8373 are Z+ elevations; 50 is DN50."
+  ]
+}
