@@ -1,8 +1,10 @@
 
-import csv
 import json
+import time
 import math
+import csv
 import re
+
 from pathlib import Path
 
 import pymupdf
@@ -30,7 +32,7 @@ def is_numeric_dimension(text):
     value = int(s)
 
     # Отклонения значений. Данные чертежа мешают разметке значений расстояния.
-    return 40 <= value <= 99999 #and value not in EXCLUDED_VALUES
+    return 20 <= value <= 99999 #and value not in EXCLUDED_VALUES
 
 
 def midpoint(b):
@@ -467,30 +469,39 @@ def markup_pdf(pdf_path, report, output_pdf_path):
 def main(pdf):
     outdir = Path("result_v06")
     outdir.mkdir(parents=True, exist_ok=True)
-
     report = analyze_pdf(pdf, outdir)
 
     print(f"PDF: {pdf}")
+    print(f"Всего страниц в документе: {len(report['pages'])}\n")
 
+    # === УЛУЧШЕНИЕ 1: Детальный вывод по каждой странице ===
+    print("=" * 60)
+    print("ПОСТРАНИЧНЫЙ АНАЛИЗ")
+    print("=" * 60)
+
+    grand_total = 0
     for page in report["pages"]:
-        print(
-            f"PAGE {page['page']}: "
-            f"lines={page['vector_line_count']} "
-            f"candidates={len(page['dimension_candidates'])}"
-        )
+        # Собираем размеры именно для этой страницы
+        page_values = [
+            x["value"] for x in report["selected_dimensions"]
+            if x["page"] == page["page"]
+        ]
+        page_total = sum(page_values)
+        grand_total += page_total
 
-    print("\nSELECTED DIMENSIONS")
-    print("-------------------")
+        print(f"\n📄 СТРАНИЦА {page['page']}:")
+        print(f"   Линий обнаружено: {page['vector_line_count']}")
+        print(f"   Отобрано для расчета: {len(page_values)}")
+        if page_values:
+            print(f"   Размеры: {' + '.join(map(str, page_values))}")
+            print(f"   Длина трассы на странице: {page_total} мм")
+        else:
+            print(f"   ➜ Размеров не найдено")
 
-    values = [x["value"] for x in report["selected_dimensions"]]
-
-    print(" + ".join(map(str, values)) if values else "(none)")
-    print(f"\nTOTAL = {sum(values)} mm")
-
-    # Разметка PDF
-    marked_pdf_path = outdir / "marked_dimensions.pdf"
-    markup_pdf(pdf, report, marked_pdf_path)
+        # Разметка PDF
+        marked_pdf_path = outdir / "marked_dimensions.pdf"
+        markup_pdf(pdf, report, marked_pdf_path)
 
 
 if __name__ == "__main__":
-    main("1.pdf")
+    main("3.pdf")
