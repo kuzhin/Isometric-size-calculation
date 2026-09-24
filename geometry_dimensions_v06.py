@@ -7,14 +7,13 @@ from pathlib import Path
 
 import pymupdf
 
-
+# Какие значения будут приниматься. 1 символ, 1444441 или 210А приниматься не будут
 NUMBER_RE = re.compile(r"^\d{2,5}$")
-EXCLUDED_VALUES = {4116}
 
 # Geometry tolerances are in PDF points.
 TEXT_TO_LINE_MAX = 18.0
-PARALLEL_ANGLE_TOL = 3.0
-NESTING_OFFSET_MAX = 25.0
+PARALLEL_ANGLE_TOL = 5.0  # могут быть не идеально параллельные линии (до 5 градусов - ок)
+NESTING_OFFSET_MAX = 35.0 # расстояние между линиями (чтобы при внутреннем не было наложения)
 MIN_OVERLAP = 10.0
 MIN_CHILD_OVERLAP_FRACTION = 0.60
 MIN_PARENT_CHILD_LENGTH_RATIO = 1.50
@@ -29,7 +28,9 @@ def is_numeric_dimension(text):
     if not NUMBER_RE.fullmatch(s):
         return False
     value = int(s)
-    return 20 <= value <= 99999 and value not in EXCLUDED_VALUES
+
+    # Отклонения значений. Данные чертежа мешают разметке значений расстояния.
+    return 40 <= value <= 99999 #and value not in EXCLUDED_VALUES
 
 
 def midpoint(b):
@@ -486,7 +487,7 @@ def main(pdf):
     print(" + ".join(map(str, values)) if values else "(none)")
     print(f"\nTOTAL = {sum(values)} mm")
 
-    # === НОВЫЙ КОД: ГЕНЕРАЦИЯ РАЗМЕЧЕННОГО PDF ===
+    # Разметка PDF
     marked_pdf_path = outdir / "marked_dimensions.pdf"
     markup_pdf(pdf, report, marked_pdf_path)
 
