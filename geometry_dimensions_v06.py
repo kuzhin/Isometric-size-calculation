@@ -433,6 +433,35 @@ def analyze_pdf(pdf_path, outdir):
     doc.close()
     return report
 
+# Разметка
+def markup_pdf(pdf_path, report, output_pdf_path):
+    """
+    Открывает исходный PDF, рисует рамки вокруг bbox выбранных размеров
+    и сохраняет результат в новый файл.
+    """
+    doc = pymupdf.open(pdf_path)
+
+    # Проходим по всем страницам, которые были проанализированы
+    for page_data in report["pages"]:
+        page_no = page_data["page"]
+        # страницы индексируются с 0
+        page = doc[page_no - 1]
+
+        for c in page_data["dimension_candidates"]:
+            # Берем только те размеры, которые алгоритм выбрал для расчета
+            if c["selected_for_calculation"]:
+                bbox = c["bbox"]
+                rect = pymupdf.Rect(bbox)
+
+                # color=(R, G, B) в диапазоне от 0.0 до 1.0
+                page.draw_rect(rect, color=(1, 0, 0), width=1.5)
+
+
+    # Сохраняем в НОВЫЙ файл, чтобы не затирать оригинал
+    doc.save(output_pdf_path)
+    doc.close()
+    print(f"Размеченный PDF сохранен: {output_pdf_path}")
+
 
 def main(pdf):
     outdir = Path("result_v06")
@@ -456,6 +485,10 @@ def main(pdf):
 
     print(" + ".join(map(str, values)) if values else "(none)")
     print(f"\nTOTAL = {sum(values)} mm")
+
+    # === НОВЫЙ КОД: ГЕНЕРАЦИЯ РАЗМЕЧЕННОГО PDF ===
+    marked_pdf_path = outdir / "marked_dimensions.pdf"
+    markup_pdf(pdf, report, marked_pdf_path)
 
 
 if __name__ == "__main__":
