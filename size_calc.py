@@ -510,4 +510,4 @@ def main(pdf):
 
 
 if __name__ == "__main__":
-    main("3.pdf")
+    main("analize_pdf.pdf")
