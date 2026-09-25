@@ -404,25 +404,6 @@ def analyze_pdf(pdf_path, outdir):
 
     report["total_length_mm"] = sum(x["value"] for x in report["selected_dimensions"])
 
-    (outdir / "geometry_analysis_v06.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-
-    with (outdir / "all_dimension_candidates_v06.csv").open("w", newline="", encoding="utf-8-sig") as f:
-        w = csv.writer(f)
-        w.writerow([
-            "page", "id", "value_mm", "classification", "confidence",
-            "selected_for_calculation", "parent_dimension_id", "selection_reason"
-        ])
-        for p in report["pages"]:
-            for c in p["dimension_candidates"]:
-                w.writerow([
-                    p["page"], c["id"], c["value"], c["classification"],
-                    c["classification_confidence"], c["selected_for_calculation"],
-                    c["parent_dimension_id"], c["selection_reason"]
-                ])
-
     with (outdir / "selected_dimensions_v06.csv").open("w", newline="", encoding="utf-8-sig") as f:
         w = csv.writer(f)
         w.writerow(["page", "id", "value_mm", "classification", "confidence"])
@@ -466,11 +447,11 @@ def markup_pdf(pdf_path, report, output_pdf_path):
 
 
 def main(pdf):
-    outdir = Path("result_v06")
+    outdir = Path("result")
     outdir.mkdir(parents=True, exist_ok=True)
     report = analyze_pdf(pdf, outdir)
 
-    # === ПРОСТОЙ ТЕКСТОВЫЙ ОТЧЁТ ===
+    # txt
     txt_path = outdir / "summary.txt"
     grand_total = 0
     lines = []
@@ -490,12 +471,12 @@ def main(pdf):
             line = f"Page {page['page']}: Проблема в анализе."
         lines.append(line)
 
-    # Записываем в файл
+    # Запись
     with open(txt_path, "w", encoding="utf-8") as f:
         for line in lines:
             f.write(line + "\n")
 
-    # === ВЫВОД В КОНСОЛЬ ===
+    # Вывод в консоль
     print(f"PDF: {pdf}")
     print(f"Всего страниц: {len(report['pages'])}\n")
     for line in lines:
@@ -505,6 +486,27 @@ def main(pdf):
     # Разметка PDF
     marked_pdf_path = outdir / "marked_dimensions.pdf"
     markup_pdf(pdf, report, marked_pdf_path)
+
+    print("\n" + "=" * 60)
+    print("РАЗМЕРЫ ПО СТРАНИЦАМ")
+    print("=" * 60)
+
+    grand_total = 0
+    for page in report["pages"]:
+        page_values = [x["value"] for x in report["selected_dimensions"] if x["page"] == page["page"]]
+        page_total = sum(page_values)
+        grand_total += page_total
+
+        print(f"\nСтраница {page['page']}:")
+        print(f"   Линий: {page['vector_line_count']}")
+        print(f"   Размеров: {len(page_values)}")
+        if page_values:
+            print(f"   Сумма: {page_total} мм")
+
+    # Разметка PDF
+    marked_pdf_path = outdir / "marked_dimensions.pdf"
+    markup_pdf(pdf, report, marked_pdf_path)
+    print(f"\nРазмеченный PDF: {marked_pdf_path}")
 
 
 if __name__ == "__main__":
