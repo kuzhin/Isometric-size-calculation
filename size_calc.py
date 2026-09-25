@@ -1,6 +1,5 @@
 
 import json
-import time
 import math
 import csv
 import re
@@ -471,17 +470,12 @@ def main(pdf):
     outdir.mkdir(parents=True, exist_ok=True)
     report = analyze_pdf(pdf, outdir)
 
-    print(f"PDF: {pdf}")
-    print(f"Всего страниц в документе: {len(report['pages'])}\n")
-
-    # === УЛУЧШЕНИЕ 1: Детальный вывод по каждой странице ===
-    print("=" * 60)
-    print("ПОСТРАНИЧНЫЙ АНАЛИЗ")
-    print("=" * 60)
-
+    # === ПРОСТОЙ ТЕКСТОВЫЙ ОТЧЁТ ===
+    txt_path = outdir / "summary.txt"
     grand_total = 0
+    lines = []
+
     for page in report["pages"]:
-        # Собираем размеры именно для этой страницы
         page_values = [
             x["value"] for x in report["selected_dimensions"]
             if x["page"] == page["page"]
@@ -489,18 +483,28 @@ def main(pdf):
         page_total = sum(page_values)
         grand_total += page_total
 
-        print(f"\n📄 СТРАНИЦА {page['page']}:")
-        print(f"   Линий обнаружено: {page['vector_line_count']}")
-        print(f"   Отобрано для расчета: {len(page_values)}")
         if page_values:
-            print(f"   Размеры: {' + '.join(map(str, page_values))}")
-            print(f"   Длина трассы на странице: {page_total} мм")
+            sizes = "+".join(map(str, page_values))
+            line = f"Page {page['page']}:\n{sizes}={page_total} мм"
         else:
-            print(f"   ➜ Размеров не найдено")
+            line = f"Page {page['page']}: Проблема в анализе."
+        lines.append(line)
 
-        # Разметка PDF
-        marked_pdf_path = outdir / "marked_dimensions.pdf"
-        markup_pdf(pdf, report, marked_pdf_path)
+    # Записываем в файл
+    with open(txt_path, "w", encoding="utf-8") as f:
+        for line in lines:
+            f.write(line + "\n")
+
+    # === ВЫВОД В КОНСОЛЬ ===
+    print(f"PDF: {pdf}")
+    print(f"Всего страниц: {len(report['pages'])}\n")
+    for line in lines:
+        print(line)
+    print(f"\nФайл сохранён: {txt_path}")
+
+    # Разметка PDF
+    marked_pdf_path = outdir / "marked_dimensions.pdf"
+    markup_pdf(pdf, report, marked_pdf_path)
 
 
 if __name__ == "__main__":
