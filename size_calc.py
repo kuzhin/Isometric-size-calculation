@@ -595,7 +595,7 @@ def main(pdf):
     Args:
         pdf: Путь к PDF-файлу для анализа.
     """
-    outdir = Path("result")
+    outdir = Path("code_interp")
     outdir.mkdir(parents=True, exist_ok=True)
     report = analyze_pdf(pdf, outdir)
 
