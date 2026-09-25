@@ -1,9 +1,7 @@
-
 import pymupdf
 import math
 import csv
 import re
-
 from pathlib import Path
 
 # Какие значения будут приниматься. 1 символ, 1444441 или 210А приниматься не будут
@@ -12,39 +10,86 @@ NUMBER_RE = re.compile(r"^\d{2,5}$")
 # Геометрия в файле
 TEXT_TO_LINE_MAX = 18.0
 PARALLEL_ANGLE_TOL = 5.0  # могут быть не идеально параллельные линии (до 5 градусов - ок)
-NESTING_OFFSET_MAX = 35.0 # расстояние между линиями (чтобы при внутреннем не было наложения)
+NESTING_OFFSET_MAX = 35.0  # расстояние между линиями (чтобы при внутреннем не было наложения)
 MIN_OVERLAP = 10.0
 MIN_CHILD_OVERLAP_FRACTION = 0.60
 MIN_PARENT_CHILD_LENGTH_RATIO = 1.50
 
 
 def clean_text(s):
+    """Очищает текст от лишних пробелов и специальных символов.
+
+    Args:
+        s: Строка для очистки.
+
+    Returns:
+        Очищенная строка с нормализованными пробелами.
+    """
     return " ".join(s.replace("\xa0", " ").split()).strip()
 
 
 def is_numeric_dimension(text):
+    """Проверяет, является ли текст допустимым числовым размером.
+
+    Args:
+        text: Текст для проверки.
+
+    Returns:
+        True, если текст содержит число от 20 до 99999, иначе False.
+    """
     s = clean_text(text)
     if not NUMBER_RE.fullmatch(s):
         return False
     value = int(s)
-
     # Отклонения значений. Данные чертежа мешают разметке значений расстояния.
-    return 20 <= value <= 99999 #and value not in EXCLUDED_VALUES
+    return 20 <= value <= 99999  # and value not in EXCLUDED_VALUES
 
 
 def midpoint(b):
+    """Вычисляет центральную точку bounding box.
+
+    Args:
+        b: Bounding box в формате [x1, y1, x2, y2].
+
+    Returns:
+        Кортеж (x, y) координат центра.
+    """
     return ((b[0] + b[2]) / 2.0, (b[1] + b[3]) / 2.0)
 
 
 def segment_length(L):
+    """Вычисляет длину линейного сегмента.
+
+    Args:
+        L: Словарь с координатами сегмента (x1, y1, x2, y2).
+
+    Returns:
+        Длина сегмента в единицах PDF.
+    """
     return math.hypot(L["x2"] - L["x1"], L["y2"] - L["y1"])
 
 
 def segment_angle(L):
+    """Вычисляет угол сегмента относительно горизонтальной оси.
+
+    Args:
+        L: Словарь с координатами сегмента (x1, y1, x2, y2).
+
+    Returns:
+        Угол в градусах от 0 до 180.
+    """
     return math.degrees(math.atan2(L["y2"] - L["y1"], L["x2"] - L["x1"])) % 180.0
 
 
 def orientation(a):
+    """Определяет ориентацию линии по углу.
+
+    Args:
+        a: Угол в градусах.
+
+    Returns:
+        Строка: "horizontal", "vertical" или "diagonal".
+    """
     if min(a, 180.0 - a) <= 8.0:
         return "horizontal"
     if abs(a - 90.0) <= 8.0:
@@ -53,6 +98,17 @@ def orientation(a):
 
 
 def point_segment_distance(px, py, L):
+    """Вычисляет расстояние от точки до линейного сегмента.
+
+    Args:
+        px: X-координата точки.
+        py: Y-координата точки.
+        L: Словарь с координатами сегмента (x1, y1, x2, y2).
+
+    Returns:
+        Кортеж (distance, projection), где distance - минимальное расстояние,
+        projection - параметр проекции точки на сегмент (от 0 до 1).
+    """
     dx = L["x2"] - L["x1"]
     dy = L["y2"] - L["y1"]
     den = dx * dx + dy * dy
@@ -66,21 +122,35 @@ def point_segment_distance(px, py, L):
 
 
 def angle_parallel(a, b, tol=PARALLEL_ANGLE_TOL):
+    """Проверяет, являются ли два угла параллельными в пределах допуска.
+
+    Args:
+        a: Первый угол в градусах.
+        b: Второй угол в градусах.
+        tol: Допуск параллельности в градусах.
+
+    Returns:
+        True, если углы параллельны в пределах допуска, иначе False.
+    """
     d = abs(a - b) % 180.0
     return min(d, 180.0 - d) <= tol
 
 
 def projection_interval(child, parent):
-    """
-    Project child endpoints onto parent's direction.
-    Returns [min,max] in parent's local coordinate system.
+    """Проецирует конечные точки дочернего сегмента на направление родительского.
+
+    Args:
+        child: Словарь с координатами дочернего сегмента.
+        parent: Словарь с координатами родительского сегмента.
+
+    Returns:
+        Список [min, max] в локальной системе координат родительского сегмента.
     """
     dx = parent["x2"] - parent["x1"]
     dy = parent["y2"] - parent["y1"]
     L = math.hypot(dx, dy) or 1.0
     ux, uy = dx / L, dy / L
     x0, y0 = parent["x1"], parent["y1"]
-
     vals = [
         (child["x1"] - x0) * ux + (child["y1"] - y0) * uy,
         (child["x2"] - x0) * ux + (child["y2"] - y0) * uy,
@@ -89,6 +159,15 @@ def projection_interval(child, parent):
 
 
 def perpendicular_offset(child, parent):
+    """Вычисляет перпендикулярное смещение между дочерним и родительским сегментами.
+
+    Args:
+        child: Словарь с координатами дочернего сегмента.
+        parent: Словарь с координатами родительского сегмента.
+
+    Returns:
+        Абсолютное значение перпендикулярного расстояния.
+    """
     dx = parent["x2"] - parent["x1"]
     dy = parent["y2"] - parent["y1"]
     L = math.hypot(dx, dy) or 1.0
@@ -101,14 +180,40 @@ def perpendicular_offset(child, parent):
 
 
 def interval_overlap(a, b):
+    """Вычисляет длину перекрытия двух интервалов.
+
+    Args:
+        a: Первый интервал [min, max].
+        b: Второй интервал [min, max].
+
+    Returns:
+        Длина перекрытия (0, если нет перекрытия).
+    """
     return max(0.0, min(a[1], b[1]) - max(a[0], b[0]))
 
 
 def interval_length(a):
+    """Вычисляет длину интервала.
+
+    Args:
+        a: Интервал [min, max].
+
+    Returns:
+        Длина интервала (0, если некорректный).
+    """
     return max(0.0, a[1] - a[0])
 
 
 def line_features(page):
+    """Извлекает все линейные сегменты из страницы PDF.
+
+    Args:
+        page: Объект страницы PyMuPDF.
+
+    Returns:
+        Список словарей с информацией о каждой линии:
+        id, координаты, длина, угол, ориентация.
+    """
     lines = []
     for drawing_id, drawing in enumerate(page.get_drawings()):
         items = drawing.get("items", [])
@@ -137,11 +242,20 @@ def line_features(page):
 
 
 def text_objects(page):
+    """Извлекает все текстовые объекты из страницы PDF.
+
+    Args:
+        page: Объект страницы PyMuPDF.
+
+    Returns:
+        Список словарей с информацией о каждом тексте:
+        text, bbox, size.
+    """
     texts = []
     for block in page.get_text("dict").get("blocks", []):
         for line in block.get("lines", []):
             for span in line.get("spans", []):
-                t = clean_text(span.get("text", ""))
+                t = clean_text(span.get("text", " "))
                 if t:
                     texts.append({
                         "text": t,
@@ -152,24 +266,30 @@ def text_objects(page):
 
 
 def find_candidates(texts, lines):
+    """Находит кандидатов в размеры, связывая текст с ближайшими линиями.
+
+    Args:
+        texts: Список текстовых объектов.
+        lines: Список линейных сегментов.
+
+    Returns:
+        Список словарей с информацией о каждом кандидате:
+        id, value, bbox, center, associated_line_id, relations и др.
+    """
     candidates = []
     for t in texts:
         if not is_numeric_dimension(t["text"]):
             continue
-
         value = int(t["text"])
         cx, cy = midpoint(t["bbox"])
-
         nearest = []
         for L in lines:
             d, proj = point_segment_distance(cx, cy, L)
             if d <= TEXT_TO_LINE_MAX:
                 nearest.append((d, L["id"], proj))
         nearest.sort()
-
         if not nearest:
             continue
-
         best = nearest[0]
         candidates.append({
             "id": len(candidates),
@@ -196,6 +316,22 @@ def find_candidates(texts, lines):
 
 
 def build_relations(candidates, lines):
+    """Строит геометрические связи между кандидатами в размеры.
+
+    Определяет вложенность размеров (родитель/потомок), параллельные перекрытия
+    и соединения конечных точек. Классифицирует каждый кандидат как:
+    - internal_detail (внутренняя деталь)
+    - overall_or_parent_candidate (родительский размер)
+    - independent_candidate (независимый кандидат)
+
+    Args:
+        candidates: Список кандидатов в размеры.
+        lines: Список линейных сегментов.
+
+    Returns:
+        Обновленный список кандидатов с заполненными полями classification,
+        relations, selected_for_calculation и др.
+    """
     by_id = {c["id"]: c for c in candidates}
 
     # Геометрия соседних линий
@@ -204,7 +340,6 @@ def build_relations(candidates, lines):
         for j in range(i + 1, len(candidates)):
             b = candidates[j]
             lb = lines[b["associated_line_id"]]
-
             if not angle_parallel(la["angle"], lb["angle"]):
                 continue
 
@@ -212,7 +347,7 @@ def build_relations(candidates, lines):
             endpoints_a = [(la["x1"], la["y1"]), (la["x2"], la["y2"])]
             endpoints_b = [(lb["x1"], lb["y1"]), (lb["x2"], lb["y2"])]
             endpoint_dist = min(
-                math.hypot(xa-xb, ya-yb)
+                math.hypot(xa - xb, ya - yb)
                 for xa, ya in endpoints_a
                 for xb, yb in endpoints_b
             )
@@ -237,7 +372,6 @@ def build_relations(candidates, lines):
                 ia = projection_interval(la, la)
                 ib = projection_interval(lb, la)
                 overlap = interval_overlap(ia, ib)
-
                 if overlap >= MIN_OVERLAP:
                     rel = {
                         "other_id": b["id"],
@@ -256,43 +390,34 @@ def build_relations(candidates, lines):
                     })
 
     # Явное обнаружение вложенности (родитель/потомок).
-
     # Дочерний элемент считается внутренней деталью, если:
     # - его линия параллельна более длинной линии-кандидату;
     # - он находится достаточно близко к этой линии;
     # - бо́льшая часть интервала дочернего элемента перекрывается с более длинной линией;
     # - более длинная линия существенно превосходит его по длине.
-
     # Это геометрическое свидетельство, а не утверждение о том, что
     # размеры следует складывать или вычитать
-
     for child in candidates:
         lc = lines[child["associated_line_id"]]
         child_len = lc["length"]
-
         best_parent = None
         best_score = -1.0
-
         for parent in candidates:
             if parent["id"] == child["id"]:
                 continue
             lp = lines[parent["associated_line_id"]]
             parent_len = lp["length"]
-
             if parent_len < child_len * MIN_PARENT_CHILD_LENGTH_RATIO:
                 continue
             if not angle_parallel(lc["angle"], lp["angle"]):
                 continue
-
             off = perpendicular_offset(lc, lp)
             if off > NESTING_OFFSET_MAX:
                 continue
-
             child_interval = projection_interval(lc, lp)
             parent_interval = projection_interval(lp, lp)
             overlap = interval_overlap(child_interval, parent_interval)
             frac = overlap / max(interval_length(child_interval), 1e-9)
-
             if frac < MIN_CHILD_OVERLAP_FRACTION:
                 continue
 
@@ -301,7 +426,6 @@ def build_relations(candidates, lines):
             offset_score = max(0.0, 1.0 - off / NESTING_OFFSET_MAX)
             ratio_score = min(1.0, (parent_len / child_len - 1.5) / 3.0 + 0.5)
             score = 0.55 * containment + 0.30 * offset_score + 0.15 * ratio_score
-
             if score > best_score:
                 best_score = score
                 best_parent = (parent, off, frac, overlap, score)
@@ -319,7 +443,6 @@ def build_relations(candidates, lines):
                 "overlap": round(overlap, 3),
             }]
             child["parent_dimension_id"] = parent["id"]
-
             if parent["classification"] == "candidate":
                 parent["classification"] = "overall_or_parent_candidate"
                 parent["classification_confidence"] = round(max(parent["classification_confidence"], score), 3)
@@ -357,11 +480,32 @@ def build_relations(candidates, lines):
 
 
 def calculate(candidates):
+    """Вычисляет сумму значений выбранных размеров.
+
+    Args:
+        candidates: Список кандидатов в размеры.
+
+    Returns:
+        Кортеж (selected, total), где selected - список выбранных кандидатов,
+        total - сумма их значений.
+    """
     selected = [c for c in candidates if c["selected_for_calculation"]]
     return selected, sum(c["value"] for c in selected)
 
 
 def analyze_pdf(pdf_path, outdir):
+    """Анализирует PDF-файл и извлекает информацию о размерах.
+
+    Args:
+        pdf_path: Путь к PDF-файлу.
+        outdir: Директория для сохранения результатов.
+
+    Returns:
+        Словарь с результатами анализа:
+        - pages: информация по каждой странице
+        - selected_dimensions: выбранные размеры
+        - total_length_mm: общая длина
+    """
     doc = pymupdf.open(pdf_path)
     report = {
         "source": str(pdf_path),
@@ -415,11 +559,14 @@ def analyze_pdf(pdf_path, outdir):
     doc.close()
     return report
 
-# Разметка
+
 def markup_pdf(pdf_path, report, output_pdf_path):
-    """
-    Открывает исходный PDF, рисует рамки вокруг bbox выбранных размеров
-    и сохраняет результат в новый файл.
+    """Размечает PDF-файл, рисуя рамки вокруг выбранных размеров.
+
+    Args:
+        pdf_path: Путь к исходному PDF-файлу.
+        report: Словарь с результатами анализа.
+        output_pdf_path: Путь для сохранения размеченного PDF.
     """
     doc = pymupdf.open(pdf_path)
 
@@ -428,16 +575,13 @@ def markup_pdf(pdf_path, report, output_pdf_path):
         page_no = page_data["page"]
         # страницы индексируются с 0
         page = doc[page_no - 1]
-
         for c in page_data["dimension_candidates"]:
             # Берем только те размеры, которые алгоритм выбрал для расчета
             if c["selected_for_calculation"]:
                 bbox = c["bbox"]
                 rect = pymupdf.Rect(bbox)
-
                 # color=(R, G, B) в диапазоне от 0.0 до 1.0
                 page.draw_rect(rect, color=(1, 0, 0), width=1.5)
-
 
     # Сохраняем в НОВЫЙ файл, чтобы не затирать оригинал
     doc.save(output_pdf_path)
@@ -446,6 +590,11 @@ def markup_pdf(pdf_path, report, output_pdf_path):
 
 
 def main(pdf):
+    """Главная функция запуска анализа PDF.
+
+    Args:
+        pdf: Путь к PDF-файлу для анализа.
+    """
     outdir = Path("result")
     outdir.mkdir(parents=True, exist_ok=True)
     report = analyze_pdf(pdf, outdir)
