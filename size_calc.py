@@ -1,17 +1,15 @@
 
-import json
+import pymupdf
 import math
 import csv
 import re
 
 from pathlib import Path
 
-import pymupdf
-
 # Какие значения будут приниматься. 1 символ, 1444441 или 210А приниматься не будут
 NUMBER_RE = re.compile(r"^\d{2,5}$")
 
-# Geometry tolerances are in PDF points.
+# Геометрия в файле
 TEXT_TO_LINE_MAX = 18.0
 PARALLEL_ANGLE_TOL = 5.0  # могут быть не идеально параллельные линии (до 5 градусов - ок)
 NESTING_OFFSET_MAX = 35.0 # расстояние между линиями (чтобы при внутреннем не было наложения)
@@ -200,7 +198,7 @@ def find_candidates(texts, lines):
 def build_relations(candidates, lines):
     by_id = {c["id"]: c for c in candidates}
 
-    # Pairwise geometry relations between dimension-line candidates.
+    # Геометрия соседних линий
     for i, a in enumerate(candidates):
         la = lines[a["associated_line_id"]]
         for j in range(i + 1, len(candidates)):
@@ -210,7 +208,7 @@ def build_relations(candidates, lines):
             if not angle_parallel(la["angle"], lb["angle"]):
                 continue
 
-            # Endpoint-to-endpoint proximity.
+            # Приближенное точка-к-точке
             endpoints_a = [(la["x1"], la["y1"]), (la["x2"], la["y2"])]
             endpoints_b = [(lb["x1"], lb["y1"]), (lb["x2"], lb["y2"])]
             endpoint_dist = min(
@@ -233,7 +231,7 @@ def build_relations(candidates, lines):
                     "distance": round(endpoint_dist, 3),
                 })
 
-            # Parallel overlap / nesting evidence.
+            # Параллельные, наложенные линии
             off = perpendicular_offset(lb, la)
             if off <= NESTING_OFFSET_MAX:
                 ia = projection_interval(la, la)
@@ -257,16 +255,17 @@ def build_relations(candidates, lines):
                         "overlap": round(overlap, 3),
                     })
 
-    # Explicit parent/child nesting detection.
-    #
-    # A child is considered an internal detail when:
-    # - its line is parallel to a longer candidate;
-    # - it is sufficiently close to that line;
-    # - most of the child interval overlaps the longer line;
-    # - the longer line is substantially longer.
-    #
-    # This is geometry evidence, not an assertion that the dimensions should
-    # be added/subtracted.
+    # Явное обнаружение вложенности (родитель/потомок).
+
+    # Дочерний элемент считается внутренней деталью, если:
+    # - его линия параллельна более длинной линии-кандидату;
+    # - он находится достаточно близко к этой линии;
+    # - бо́льшая часть интервала дочернего элемента перекрывается с более длинной линией;
+    # - более длинная линия существенно превосходит его по длине.
+
+    # Это геометрическое свидетельство, а не утверждение о том, что
+    # размеры следует складывать или вычитать
+
     for child in candidates:
         lc = lines[child["associated_line_id"]]
         child_len = lc["length"]
@@ -297,7 +296,7 @@ def build_relations(candidates, lines):
             if frac < MIN_CHILD_OVERLAP_FRACTION:
                 continue
 
-            # Score rewards containment, parallelism and length hierarchy.
+            # Оценка поощряет вложенность, параллелизм и иерархию по длине
             containment = min(1.0, frac)
             offset_score = max(0.0, 1.0 - off / NESTING_OFFSET_MAX)
             ratio_score = min(1.0, (parent_len / child_len - 1.5) / 3.0 + 0.5)
@@ -330,7 +329,7 @@ def build_relations(candidates, lines):
                     "child_value": child["value"],
                 })
 
-    # Anything not marked internal is a candidate for selection.
+    # Всё, что не помечено как внутреннее, может быть выбрано.
     for c in candidates:
         if c["classification"] == "candidate":
             c["classification"] = "independent_candidate"
@@ -342,8 +341,8 @@ def build_relations(candidates, lines):
                 "type": "usable_dimension_line_association"
             })
 
-        # Selection is intentionally explicit and conservative:
-        # internal details are never selected automatically.
+        # Выбор намеренно явный и консервативный:
+        # внутренние детали никогда не выбираются автоматически
         if c["classification"] in {"internal_detail", "candidate"}:
             c["selected_for_calculation"] = False
             c["selection_reason"] = "internal/detail or unresolved candidate"
